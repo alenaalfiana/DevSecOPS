@@ -262,20 +262,20 @@
               "threats": [
                 {
                   "id": "eef1b3fb-b1b6-4081-a069-03a615e335a7",
-                  "title": "Credential Stuffing / Brute Force",
+                  "title": "Account Takeover via Credential Stuffing",
                   "status": "Open",
                   "severity": "High",
                   "type": "Spoofing",
-                  "description": "Attacker melakukan credential stuffing/phishing untuk berpura-pura menjadi user sah saat login.",
-                  "mitigation": "- Terapkan MFA (OTP/authenticator app)\n- Rate limiting & account lockout setelah N kali gagal login\n- CAPTCHA pada form login\n- Deteksi anomali (login dari lokasi/device baru → verifikasi tambahan)",
+                  "description": "Attacker menggunakan kredensial bocor (dari data breach lain) atau phishing untuk login sebagai user sah.",
+                  "mitigation": "- MFA (OTP/authenticator)\n- Rate limiting & account lockout\n- CAPTCHA\n- Deteksi anomali login",
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 2,
-                  "score": "7.5"
+                  "score": "9"
                 }
               ],
               "threatFrequency": {
-                "spoofing": 1,
+                "spoofing": 2,
                 "repudiation": 0
               }
             }
@@ -400,20 +400,20 @@
               "threats": [
                 {
                   "id": "d27e754c-8d12-4ba7-9ca8-f518afc04498",
-                  "title": "False Service",
+                  "title": "Internal Service Impersonation\t",
                   "status": "Open",
-                  "severity": "TBD",
+                  "severity": "High",
                   "type": "Spoofing",
-                  "description": "Service palsu meniru Auth/Order Service di DMZ",
-                  "mitigation": "- Terapkan mutual TLS (mTLS) antar-service\n- Gunakan signed API key/JWT dengan masa berlaku pendek untuk komunikasi internal\n- Service mesh (misal Istio) untuk verifikasi identitas otomatis antar service",
+                  "description": "Service palsu menyamar sebagai Auth/Order Service di dalam DMZ karena tidak ada verifikasi identitas antar-service.",
+                  "mitigation": "- Mutual TLS (mTLS)\n- Signed API key/JWT short-lived\n- Service mesh (Istio)",
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 3,
-                  "score": ""
+                  "score": "8"
                 }
               ],
               "threatFrequency": {
-                "spoofing": 1,
+                "spoofing": 2,
                 "tampering": 0,
                 "repudiation": 0,
                 "informationDisclosure": 0,
@@ -542,22 +542,22 @@
               "threats": [
                 {
                   "id": "7cb6bccf-4162-4b04-b3e8-d753e8a1ad6e",
-                  "title": "Manipulasi / Perubahan Akun saat Login",
+                  "title": "Login Activity Denial",
                   "status": "Open",
-                  "severity": "TBD",
+                  "severity": "Medium",
                   "type": "Repudiation",
-                  "description": "User atau attacker menyangkal telah melakukan login/perubahan akun karena tidak ada log aktivitas yang cukup dan tidak dapat diubah (immutable).",
-                  "mitigation": "- Centralized audit logging (siapa, kapan, IP, device) untuk setiap event login\n- Log bersifat append-only/immutable (write-once storage atau hash chaining)\n- Sinkronisasi waktu dengan NTP agar timestamp akurat",
+                  "description": "User/attacker menyangkal telah login atau mengubah akun karena log aktivitas tidak memadai/tidak immutable.",
+                  "mitigation": "- Centralized audit logging (siapa, kapan, IP, device)\n- Log append-only/immutable\n- Sinkronisasi waktu via NTP",
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 6,
-                  "score": ""
+                  "score": "6"
                 }
               ],
               "threatFrequency": {
                 "spoofing": 0,
                 "tampering": 0,
-                "repudiation": 1,
+                "repudiation": 2,
                 "informationDisclosure": 0,
                 "denialOfService": 0,
                 "elevationOfPrivilege": 0
@@ -826,22 +826,22 @@
               "threats": [
                 {
                   "id": "550d7913-96cf-455c-9489-f447585ded58",
-                  "title": "Penyangkalan Transaksi Pembayaran (Payment Token Repudiation)",
+                  "title": "Untraceable Payment Token Storage\t",
                   "status": "Open",
-                  "severity": "TBD",
+                  "severity": "Medium",
                   "type": "Repudiation",
-                  "description": "Tidak ada pencatatan siapa/kapan token pembayaran disimpan.",
-                  "mitigation": "Logging detail transaksi, digital signature, penyimpanan log terpisah",
+                  "description": "Tidak ada pencatatan siapa/kapan token pembayaran disimpan, sehingga transaksi sulit diaudit.",
+                  "mitigation": "- Log detail setiap Store Token (order ID, timestamp, service asal)\n- Digital signature pada log transaksi\n- Log disimpan terpisah dari service asal",
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 8,
-                  "score": ""
+                  "score": "7"
                 }
               ],
               "threatFrequency": {
                 "spoofing": 0,
                 "tampering": 0,
-                "repudiation": 1,
+                "repudiation": 2,
                 "informationDisclosure": 0,
                 "denialOfService": 0,
                 "elevationOfPrivilege": 0
@@ -974,7 +974,7 @@
               "threats": [
                 {
                   "id": "f80dcd2f-2a6e-4561-ac86-b65f9781909f",
-                  "title": "Kebocoran Data",
+                  "title": "Sensitive Data Leakage from Database",
                   "status": "Open",
                   "severity": "Critical",
                   "type": "Information disclosure",
@@ -989,7 +989,7 @@
               "threatFrequency": {
                 "tampering": 0,
                 "repudiation": 0,
-                "informationDisclosure": 1,
+                "informationDisclosure": 3,
                 "denialOfService": 0
               }
             }
@@ -1120,7 +1120,7 @@
               "threats": [
                 {
                   "id": "a899baf4-9679-4146-ae91-65cdb603e044",
-                  "title": "Pencurian Token",
+                  "title": "Session Hijacking via Token Theft",
                   "status": "Open",
                   "severity": "High",
                   "type": "Information disclosure",
@@ -1135,7 +1135,7 @@
               "threatFrequency": {
                 "tampering": 0,
                 "repudiation": 0,
-                "informationDisclosure": 1,
+                "informationDisclosure": 2,
                 "denialOfService": 0
               }
             }
@@ -1443,21 +1443,21 @@
               "threats": [
                 {
                   "id": "28d979e7-71c3-414a-aa03-5527e4825bdd",
-                  "title": "Data order dimodifikasi saat transit (Order Create)",
+                  "title": "Order Data Manipulation in Transit",
                   "status": "Open",
-                  "severity": "TBD",
+                  "severity": "High",
                   "type": "Tampering",
-                  "description": "Data pesanan (jumlah, harga, item) dimodifikasi saat transit jika komunikasi internal tidak dienkripsi/tidak ada integritas pesan.",
-                  "mitigation": "- Enkripsi TLS untuk seluruh komunikasi internal, bukan hanya dari internet\n- Tambahkan message integrity check (HMAC/digital signature) pada payload kritis\n- Validasi ulang data di sisi server (server-side validation), jangan percaya input dari client",
+                  "description": "Data pesanan (jumlah, harga, item) diubah saat transit karena komunikasi internal tidak terenkripsi/terverifikasi.",
+                  "mitigation": "- TLS untuk seluruh komunikasi internal\n- HMAC/digital signature pada payload\n- Server-side validation",
                   "modelType": "STRIDE",
                   "new": false,
                   "number": 4,
-                  "score": ""
+                  "score": "8"
                 }
               ],
               "trustBoundaryIds": [],
               "threatFrequency": {
-                "tampering": 1,
+                "tampering": 2,
                 "informationDisclosure": 0,
                 "denialOfService": 0
               }
@@ -1580,8 +1580,7 @@
             "shape": "flow",
             "attrs": {
               "line": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
+                "stroke": "#333333",
                 "targetMarker": {
                   "name": "block"
                 },
@@ -1602,26 +1601,12 @@
               "outOfScope": false,
               "isTrustBoundary": false,
               "reasonOutOfScope": "",
-              "hasOpenThreats": true,
+              "hasOpenThreats": false,
               "isBidirectional": false,
               "isEncrypted": false,
               "isPublicNetwork": false,
               "protocol": "",
-              "threats": [
-                {
-                  "id": "9ee1b59c-cefc-47a6-9bbf-ed44d012614b",
-                  "title": "New STRIDE threat",
-                  "status": "Open",
-                  "severity": "TBD",
-                  "type": "Tampering",
-                  "description": "Provide a description for this threat",
-                  "mitigation": "Provide remediation for this threat or a reason if status is N/A",
-                  "modelType": "STRIDE",
-                  "new": true,
-                  "number": 7,
-                  "score": ""
-                }
-              ],
+              "threats": [],
               "trustBoundaryIds": [
                 "341edfff-446a-4fe3-b813-d1c6cfed8169",
                 "6d559fd0-f9e5-4132-97d4-1346f44f6d29"
@@ -1639,7 +1624,16 @@
               "cell": "94c40e3c-4677-4f93-9496-99ce3a613d1f",
               "port": "fc9dfa95-c3ff-48e6-b8ef-1b664e55c08e"
             },
-            "vertices": []
+            "vertices": [
+              {
+                "x": 1120,
+                "y": 490
+              },
+              {
+                "x": 1250,
+                "y": 400
+              }
+            ]
           }
         ],
         "description": "Data Flow Diagram untuk aplikasi pemesanan online"
@@ -1647,6 +1641,6 @@
     ],
     "diagramTop": 2,
     "reviewer": "April Rustianto, M. Kom",
-    "threatTop": 11
+    "threatTop": 12
   }
 }
